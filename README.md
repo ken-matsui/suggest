@@ -1,6 +1,6 @@
 # suggestion
 
-This library Pprovides suggestion traits for all collection types in the standard library.
+This library provides suggestion traits for all collection types in the standard library.
 
 ## Example
 
