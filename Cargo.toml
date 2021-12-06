@@ -1,6 +1,6 @@
 [package]
 name = "suggestion"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Ken Matsui <26405363+ken-matsui@users.noreply.github.com>"]
 description = "Provides suggestion traits for all collection types in the standard library"
@@ -11,4 +11,4 @@ homepage = "https://github.com/ken-matsui/suggestion#readme"
 documentation = "https://docs.rs/suggestion"
 
 [dependencies]
-lev_distance = "0.1.0"
+lev_distance = "0.1.1"
