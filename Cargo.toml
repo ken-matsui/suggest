@@ -1,6 +1,6 @@
 [package]
 name = "suggestion"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Ken Matsui <26405363+ken-matsui@users.noreply.github.com>"]
 description = "Provides suggestion traits for all collection types in the standard library"

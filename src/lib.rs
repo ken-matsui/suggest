@@ -80,6 +80,13 @@ macro_rules! impl_suggest_value {
     };
 }
 
+// Primitive Array Type
+impl<T: std::convert::AsRef<str>, const N: usize> Suggest for [T; N] {
+    fn suggest(&self, query: &str) -> Option<String> {
+        find_best_match_for_name(self.iter(), query, None)
+    }
+}
+
 // Sequences
 impl_suggest!(LinkedList);
 impl_suggest!(VecDeque);
@@ -124,6 +131,19 @@ mod tests {
                 assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
             }
         };
+    }
+
+    // Primitive Array Type
+    #[test]
+    fn test_array() {
+        let input = ["aaab", "aaabc"];
+        assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
+
+        let ref input = ["aaab", "aaabc"];
+        assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
+
+        let ref mut input = ["aaab", "aaabc"];
+        assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
     }
 
     // Sequences
