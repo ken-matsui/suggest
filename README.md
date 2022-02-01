@@ -1,5 +1,6 @@
 # suggestion
 
+A minimal library for similar name suggestions to provide helps like "Did you mean?"
 This library provides suggestion traits for all collection types in the standard library.
 
 ## Example
