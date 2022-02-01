@@ -1,0 +1,14 @@
+[package]
+name = "suggestion"
+version = "0.1.3"
+edition = "2021"
+authors = ["Ken Matsui <26405363+ken-matsui@users.noreply.github.com>"]
+description = "A minimal library for similar name suggestions to provide helps like \"Did you mean?\""
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/ken-matsui/suggestion/suggestion/"
+homepage = "https://github.com/ken-matsui/suggestion/suggestion#readme"
+documentation = "https://docs.rs/suggestion"
+
+[dependencies]
+lev_distance = "0.1.1"

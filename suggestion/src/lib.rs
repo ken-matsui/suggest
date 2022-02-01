@@ -4,18 +4,16 @@
 //! ```
 //! use suggestion::Suggest;
 //!
-//! fn main() {
-//!     let input = "instakk";
+//! let input = "instakk";
 //!
-//!     let list_commands = vec!["update", "install"];
-//!     if list_commands.contains(&input) {
-//!         return;
-//!     }
+//! let list_commands = vec!["update", "install"];
+//! if list_commands.contains(&input) {
+//!     return;
+//! }
 //!
-//!     if let Some(sugg) = list_commands.suggest(input) {
-//!         println!("No command named `{}` found.", input);
-//!         println!("Did you mean `{}`?", sugg);
-//!     }
+//! if let Some(sugg) = list_commands.suggest(input) {
+//!     println!("No command named `{}` found.", input);
+//!     println!("Did you mean `{}`?", sugg);
 //! }
 //! ```
 //!
@@ -87,6 +85,13 @@ impl<T: std::convert::AsRef<str>, const N: usize> Suggest for [T; N] {
     }
 }
 
+// Slices
+impl<T: std::convert::AsRef<str>> Suggest for [T] {
+    fn suggest(&self, query: &str) -> Option<String> {
+        find_best_match_for_name(self.iter(), query, None)
+    }
+}
+
 // Sequences
 impl_suggest!(LinkedList);
 impl_suggest!(VecDeque);
@@ -144,6 +149,19 @@ mod tests {
 
         let ref mut input = ["aaab", "aaabc"];
         assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
+    }
+
+    // Slices
+    #[test]
+    fn test_slices() {
+        let input = ["", "aaab", "aaabc"];
+        assert_eq!(input[1..].suggest("aaaa"), Some("aaab".to_string()));
+
+        let ref input = ["", "aaab", "aaabc"];
+        assert_eq!(input[1..].suggest("aaaa"), Some("aaab".to_string()));
+
+        let ref mut input = ["", "aaab", "aaabc"];
+        assert_eq!(input[1..].suggest("aaaa"), Some("aaab".to_string()));
     }
 
     // Sequences

@@ -1,32 +1,46 @@
-# suggestion
+# suggestion-cli
 
-A minimal library for similar name suggestions to provide helps like "Did you mean?"
-This library provides suggestion traits for all collection types in the standard library.
+A CLI tool for similar name suggestions to provide helps like "Did you mean?"
+The library version is placed [here](./suggestion).
 
-## Example
+## Installation
 
-This example can be executed by the `cargo run --example simple` command.
-
-```rust
-use suggestion::Suggest;
-
-fn main() {
-    let input = "instakk";
-
-    let list_commands = vec!["update", "install"];
-    if list_commands.contains(&input) {
-        return;
-    }
-
-    if let Some(sugg) = list_commands.suggest(input) {
-        println!("No command named `{}` found.", input);
-        println!("Did you mean `{}`?", sugg);
-    }
-}
+```bash
+cargo install suggestion-cli
 ```
 
-```shell
-$ cargo run
-No command named `instakk` found.
-Did you mean `install`?
+## Usage
+
+```bash
+$ suggest --help
+suggestion-cli 0.1.0
+A CLI tool for similar name suggestions to provide helps like "Did you mean?"
+
+USAGE:
+    suggest <INPUT> [POSSIBLE_VALUES]...
+
+ARGS:
+    <INPUT>                 Input to check if similar name exists
+    <POSSIBLE_VALUES>...    Values of similar names
+
+OPTIONS:
+    -h, --help       Print help information
+    -V, --version    Print version information
 ```
+
+## Examples
+
+```bash
+$ suggest instakk update install
+The `instakk` input is similar to `install`.
+
+$ suggest hoge update install
+No similar name for the `hoge` input was found.
+
+$ suggest install update install
+The same value with the `install` input exists.
+```
+
+## Contribution
+
+Contributions, including issues and pull requests, are very welcome.
