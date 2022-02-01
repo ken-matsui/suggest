@@ -14,7 +14,7 @@ cargo install suggestion-cli
 
 ```bash
 $ suggest --help
-suggestion-cli 0.3.0
+suggestion-cli 0.3.1
 A CLI tool for similar name suggestions to provide helps like "Did you mean?"
 
 USAGE:
@@ -27,6 +27,7 @@ ARGS:
 OPTIONS:
     -d, --distance <DISTANCE>    Levenshtein Distance
     -h, --help                   Print help information
+    -q, --quiet                  Disable console outputs
     -V, --version                Print version information
 ```
 

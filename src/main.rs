@@ -10,6 +10,10 @@ struct Args {
     /// Values of similar names
     values: Vec<String>,
 
+    /// Disable console outputs
+    #[clap(short, long)]
+    quiet: bool,
+
     /// Levenshtein Distance
     #[clap(short, long)]
     distance: Option<usize>,
@@ -19,13 +23,19 @@ fn main() {
     let args = Args::parse();
 
     let exit_code = if args.values.contains(&args.input) {
-        eprintln!("The same value with the `{}` input exists.", args.input);
+        if !args.quiet {
+            eprintln!("The same value with the `{}` input exists.", args.input);
+        };
         1
     } else if let Some(sugg) = args.values.suggest_with_dist(&args.input, args.distance) {
-        println!("The `{}` input is similar to `{}`.", args.input, sugg);
+        if !args.quiet {
+            println!("The `{}` input is similar to `{}`.", args.input, sugg);
+        };
         0
     } else {
-        println!("No similar value for the `{}` input was found.", args.input);
+        if !args.quiet {
+            println!("No similar value for the `{}` input was found.", args.input);
+        };
         1
     };
     std::process::exit(exit_code);
