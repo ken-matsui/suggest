@@ -44,10 +44,16 @@ use std::collections::BinaryHeap;
 pub trait Suggest {
     /// Find similar name in values for all collections
     fn suggest(&self, query: &str) -> Option<String>;
+
+    /// Find similar name with dist in values for all collections
+    fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String>;
 }
 pub trait SuggestKey {
     /// Find similar name in keys for Map collections
     fn suggest_key(&self, query: &str) -> Option<String>;
+
+    /// Find similar name with dist in keys for Map collections
+    fn suggest_key_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String>;
 }
 
 macro_rules! impl_suggest {
@@ -55,6 +61,9 @@ macro_rules! impl_suggest {
         impl<T: std::convert::AsRef<str>> Suggest for $t<T> {
             fn suggest(&self, query: &str) -> Option<String> {
                 find_best_match_for_name(self.iter(), query, None)
+            }
+            fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
+                find_best_match_for_name(self.iter(), query, dist)
             }
         }
     };
@@ -65,6 +74,9 @@ macro_rules! impl_suggest_key {
             fn suggest_key(&self, query: &str) -> Option<String> {
                 find_best_match_for_name(self.keys(), query, None)
             }
+            fn suggest_key_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
+                find_best_match_for_name(self.keys(), query, dist)
+            }
         }
     };
 }
@@ -73,6 +85,9 @@ macro_rules! impl_suggest_value {
         impl<T, U: std::convert::AsRef<str>> Suggest for $t<T, U> {
             fn suggest(&self, query: &str) -> Option<String> {
                 find_best_match_for_name(self.values(), query, None)
+            }
+            fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
+                find_best_match_for_name(self.values(), query, dist)
             }
         }
     };
@@ -83,12 +98,18 @@ impl<T: std::convert::AsRef<str>, const N: usize> Suggest for [T; N] {
     fn suggest(&self, query: &str) -> Option<String> {
         find_best_match_for_name(self.iter(), query, None)
     }
+    fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
+        find_best_match_for_name(self.iter(), query, dist)
+    }
 }
 
 // Slices
 impl<T: std::convert::AsRef<str>> Suggest for [T] {
     fn suggest(&self, query: &str) -> Option<String> {
         find_best_match_for_name(self.iter(), query, None)
+    }
+    fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
+        find_best_match_for_name(self.iter(), query, dist)
     }
 }
 
@@ -114,12 +135,39 @@ impl_suggest!(BinaryHeap);
 mod tests {
     use super::*;
 
+    macro_rules! test_suggest_primitive {
+        ($t:ty, $f:ident) => {
+            #[test]
+            fn $f() {
+                let tmp = ["aaab", "aaabc"];
+                let input: $t = &tmp;
+                assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
+
+                let tmp = ["poac", "poacpp"];
+                let input: $t = &tmp;
+                assert_eq!(input.suggest("paoc"), None);
+                assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
+                assert_eq!(
+                    input.suggest_with_dist("paoc", Some(2)),
+                    Some("poac".to_string())
+                );
+            }
+        };
+    }
     macro_rules! test_suggest {
         ($t:ident, $f:ident) => {
             #[test]
             fn $f() {
                 let input: $t<_> = vec!["aaab", "aaabc"].into_iter().collect();
                 assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
+
+                let input: $t<_> = vec!["poac", "poacpp"].into_iter().collect();
+                assert_eq!(input.suggest("paoc"), None);
+                assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
+                assert_eq!(
+                    input.suggest_with_dist("paoc", Some(2)),
+                    Some("poac".to_string())
+                );
             }
         };
     }
@@ -134,35 +182,30 @@ mod tests {
 
                 let input = $t::<_, _>::from_iter(IntoIter::new([(2, "aaab"), (4, "aaabc")]));
                 assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
+
+                let input = $t::<_, _>::from_iter(IntoIter::new([("poac", 2), ("poacpp", 4)]));
+                assert_eq!(input.suggest_key("paoc"), None);
+                assert_eq!(input.suggest_key_with_dist("paoc", Some(1)), None);
+                assert_eq!(
+                    input.suggest_key_with_dist("paoc", Some(2)),
+                    Some("poac".to_string())
+                );
+
+                let input = $t::<_, _>::from_iter(IntoIter::new([(2, "poac"), (4, "poacpp")]));
+                assert_eq!(input.suggest("paoc"), None);
+                assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
+                assert_eq!(
+                    input.suggest_with_dist("paoc", Some(2)),
+                    Some("poac".to_string())
+                );
             }
         };
     }
 
     // Primitive Array Type
-    #[test]
-    fn test_array() {
-        let input = ["aaab", "aaabc"];
-        assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
-
-        let ref input = ["aaab", "aaabc"];
-        assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
-
-        let ref mut input = ["aaab", "aaabc"];
-        assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
-    }
-
+    test_suggest_primitive!(&[&str; 2], test_array);
     // Slices
-    #[test]
-    fn test_slices() {
-        let input = ["", "aaab", "aaabc"];
-        assert_eq!(input[1..].suggest("aaaa"), Some("aaab".to_string()));
-
-        let ref input = ["", "aaab", "aaabc"];
-        assert_eq!(input[1..].suggest("aaaa"), Some("aaab".to_string()));
-
-        let ref mut input = ["", "aaab", "aaabc"];
-        assert_eq!(input[1..].suggest("aaaa"), Some("aaab".to_string()));
-    }
+    test_suggest_primitive!(&[&str], test_slices);
 
     // Sequences
     test_suggest!(LinkedList, test_suggest_linked_list);

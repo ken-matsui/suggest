@@ -1,6 +1,6 @@
 [package]
 name = "suggestion-cli"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["Ken Matsui <26405363+ken-matsui@users.noreply.github.com>"]
 description = "A CLI tool for similar name suggestions to provide helps like \"Did you mean?\""
@@ -8,7 +8,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/ken-matsui/suggestion/"
 homepage = "https://github.com/ken-matsui/suggestion#readme"
-documentation = "https://docs.rs/suggest"
+documentation = "https://docs.rs/suggestion-cli"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -17,7 +17,7 @@ members = ["suggestion"]
 
 [dependencies]
 clap = { version = "3.0.13", features = ["derive"] }
-suggestion = { path = "suggestion", version = "0.2.0" }
+suggestion = { path = "suggestion", version = "0.3.0" }
 
 [[bin]]
 name = "suggest"

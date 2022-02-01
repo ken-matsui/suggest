@@ -14,19 +14,20 @@ cargo install suggestion-cli
 
 ```bash
 $ suggest --help
-suggestion-cli 0.1.0
+suggestion-cli 0.3.0
 A CLI tool for similar name suggestions to provide helps like "Did you mean?"
 
 USAGE:
-    suggest <INPUT> [POSSIBLE_VALUES]...
+    suggest [OPTIONS] <INPUT> [VALUES]...
 
 ARGS:
-    <INPUT>                 Input to check if similar name exists
-    <POSSIBLE_VALUES>...    Values of similar names
+    <INPUT>        Input to check if similar name exists
+    <VALUES>...    Values of similar names
 
 OPTIONS:
-    -h, --help       Print help information
-    -V, --version    Print version information
+    -d, --distance <DISTANCE>    Levenshtein Distance
+    -h, --help                   Print help information
+    -V, --version                Print version information
 ```
 
 ## Examples
@@ -40,6 +41,12 @@ No similar name for the `hoge` input was found.
 
 $ suggest install update install
 The same value with the `install` input exists.
+
+$ suggest paoc poac poacpp
+No similar name for the `paoc` input was found.
+
+$ suggest paoc poac poacpp --distance 2
+The `paoc` input is similar to `poac`.
 ```
 
 ## Contribution
