@@ -1,4 +1,4 @@
-# suggestion-cli
+# suggestion-cli [![crates.io version](https://img.shields.io/crates/v/suggestion-cli.svg)](https://crates.io/crates/suggestion-cli) [![crates.io downloads](https://img.shields.io/crates/d/suggestion-cli.svg)](https://crates.io/crates/suggestion-cli)
 
 A CLI tool for similar name suggestions to provide helps like "Did you mean?"
 
