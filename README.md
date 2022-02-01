@@ -1,6 +1,7 @@
 # suggestion-cli
 
 A CLI tool for similar name suggestions to provide helps like "Did you mean?"
+
 The library version is placed [here](./suggestion).
 
 ## Installation
