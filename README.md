@@ -5,6 +5,8 @@ This library provides suggestion traits for all collection types in the standard
 
 ## Example
 
+This example can be executed by the `cargo run --example simple` command.
+
 ```rust
 use suggestion::Suggest;
 
