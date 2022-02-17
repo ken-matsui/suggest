@@ -16,7 +16,7 @@ documentation = "https://docs.rs/suggestion-cli"
 members = ["suggestion"]
 
 [dependencies]
-clap = { version = "3.0.14", features = ["derive"] }
+clap = { version = "3.1.0", features = ["derive"] }
 suggestion = { path = "suggestion", version = "0.3.0" }
 
 [[bin]]
