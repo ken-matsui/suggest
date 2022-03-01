@@ -175,15 +175,13 @@ mod tests {
         ($t:ident, $f:ident) => {
             #[test]
             fn $f() {
-                use std::array::IntoIter;
-
-                let input = $t::<_, _>::from_iter(IntoIter::new([("aaab", 2), ("aaabc", 4)]));
+                let input = $t::<_, _>::from_iter([("aaab", 2), ("aaabc", 4)].into_iter());
                 assert_eq!(input.suggest_key("aaaa"), Some("aaab".to_string()));
 
-                let input = $t::<_, _>::from_iter(IntoIter::new([(2, "aaab"), (4, "aaabc")]));
+                let input = $t::<_, _>::from_iter([(2, "aaab"), (4, "aaabc")].into_iter());
                 assert_eq!(input.suggest("aaaa"), Some("aaab".to_string()));
 
-                let input = $t::<_, _>::from_iter(IntoIter::new([("poac", 2), ("poacpp", 4)]));
+                let input = $t::<_, _>::from_iter([("poac", 2), ("poacpp", 4)].into_iter());
                 assert_eq!(input.suggest_key("paoc"), None);
                 assert_eq!(input.suggest_key_with_dist("paoc", Some(1)), None);
                 assert_eq!(
@@ -191,7 +189,7 @@ mod tests {
                     Some("poac".to_string())
                 );
 
-                let input = $t::<_, _>::from_iter(IntoIter::new([(2, "poac"), (4, "poacpp")]));
+                let input = $t::<_, _>::from_iter([(2, "poac"), (4, "poacpp")].into_iter());
                 assert_eq!(input.suggest("paoc"), None);
                 assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
                 assert_eq!(

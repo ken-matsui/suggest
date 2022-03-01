@@ -1,21 +1,106 @@
-# suggestion-cli [![crates.io version](https://img.shields.io/crates/v/suggestion-cli.svg)](https://crates.io/crates/suggestion-cli) [![crates.io downloads](https://img.shields.io/crates/d/suggestion-cli.svg)](https://crates.io/crates/suggestion-cli)
+# suggestion [![crates.io version](https://img.shields.io/crates/v/suggestion.svg)](https://crates.io/crates/suggestion) [![crates.io downloads](https://img.shields.io/crates/d/suggestion.svg)](https://crates.io/crates/suggestion)
 
-A CLI tool for similar name suggestions to provide helps like "Did you mean?"
+A minimal library & CLI tool to provide similar name suggestions like "Did you mean?"
+This library provides suggestion traits for all collection types in the standard library.
 
-The library version is placed [here](./suggestion).
+## Examples
 
-## Installation
+### Simple case
 
-```bash
-cargo install suggestion-cli
+This example can be executed by the `cargo run --example simple` command.
+
+```rust
+use suggestion::Suggest;
+
+fn main() {
+    let input = "instakk";
+
+    let list_commands = vec!["update", "install"];
+    if list_commands.contains(&input) {
+        return;
+    }
+
+    if let Some(sugg) = list_commands.suggest(input) {
+        println!("No command named `{}` found.", input);
+        println!("Did you mean `{}`?", sugg);
+    }
+}
 ```
 
-## Usage
+```shell
+$ cargo run
+No command named `instakk` found.
+Did you mean `install`?
+```
+
+### Specifying distance
+
+```rust
+use suggestion::Suggest;
+
+fn main() {
+    let input = "paoc";
+
+    let list_commands = vec!["poac", "poacpp"];
+    if list_commands.contains(&input) {
+        return;
+    }
+
+    if let Some(sugg) = list_commands.suggest_with_dist(input, Some(2)) {
+        println!("No command named `{}` found.", input);
+        println!("Did you mean `{}`?", sugg);
+    }
+}
+```
+
+```shell
+$ cargo run
+No command named `paoc` found.
+Did you mean `poac`?
+```
+
+## Supported types
+
+Please let me know if anything is left out through issues or pull requests.
+
+### Sequences
+
+* `LinkedList`
+* `VecDeque`
+* `Vec`
+
+### Maps
+
+* `HashMap`
+* `BTreeMap`
+
+To suggest keys, use `suggestion::SuggestKey` trait.
+
+### Sets
+
+* `BTreeSet`
+* `HashSet`
+
+### Misc
+
+* `BinaryHeap`
+* `[T; N]`: primitive array
+* `[T]`: slices
+
+## CLI
+
+### Installation
+
+```bash
+cargo install suggestion
+```
+
+### Usage
 
 ```bash
 $ suggest --help
-suggestion-cli 0.3.1
-A CLI tool for similar name suggestions to provide helps like "Did you mean?"
+suggestion 0.3.1
+A minimal library & CLI tool to provide similar name suggestions like "Did you mean?"
 
 USAGE:
     suggest [OPTIONS] <INPUT> [VALUES]...
@@ -31,7 +116,7 @@ OPTIONS:
     -V, --version                Print version information
 ```
 
-## Examples
+### Examples
 
 ```bash
 $ suggest instakk update install

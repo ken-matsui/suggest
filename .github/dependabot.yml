@@ -14,8 +14,3 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-
-  - package-ecosystem: "cargo" # See documentation for possible values
-    directory: "/suggestion/" # Location of package manifests
-    schedule:
-      interval: "daily"

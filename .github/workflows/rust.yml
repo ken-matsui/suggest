@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -20,16 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
     - name: Build
       run: cargo build --verbose
-
-    - name: Run tests
-      run: cargo test --verbose
-
-    - name: Run tests on suggesion/
-      run: cargo test --verbose
-      working-directory: suggestion
 
   run:
     strategy:
@@ -44,3 +35,30 @@ jobs:
       - run: cargo run instakk update install
       - run: cargo run install update install && exit 1 || exit 0
       - run: cargo run hoge update install && exit 1 || exit 0
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: cargo fmt --all -- --check
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-targets --all-features -- -D clippy::all -D warnings
+
+  test:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: cargo build --verbose
+      - name: Run tests
+        run: cargo test --verbose
