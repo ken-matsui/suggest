@@ -2,6 +2,7 @@
 
 A minimal library & CLI tool to provide similar name suggestions like "Did you mean?"
 This library provides suggestion traits for all collection types in the standard library.
+A WebAssembly package is also supported. 
 
 ## Examples
 
@@ -95,6 +96,15 @@ To suggest keys, use `suggestion::SuggestKey` trait.
 cargo install suggestion
 ```
 
+#### WebAssembly
+
+This application also provides a wasm package.
+You can install it using [`wapm`](https://wapm.io/help/install) by the following command:
+
+```bash
+$ wapm install ken-matsui/suggest
+```
+
 ### Usage
 
 ```bash
@@ -116,6 +126,13 @@ OPTIONS:
     -V, --version                Print version information
 ```
 
+#### WebAssembly
+
+```bash
+$ wapm run suggest --help
+...
+```
+
 ### Examples
 
 ```bash
@@ -135,6 +152,76 @@ $ suggest paoc poac poacpp --distance 2
 The `paoc` input is similar to `poac`.
 ```
 
+#### WebAssembly
+
+```bash
+$ wapm run suggest instakk update install
+The `instakk` input is similar to `install`.
+
+$ wapm run suggest hoge update install
+No similar name for the `hoge` input was found.
+
+$ wapm run suggest install update install
+The same value with the `install` input exists.
+
+$ wapm run suggest paoc poac poacpp
+No similar name for the `paoc` input was found.
+
+$ wapm run suggest paoc poac poacpp --distance 2
+The `paoc` input is similar to `poac`.
+```
+
 ## Contribution
 
 Contributions, including issues and pull requests, are very welcome.
+
+### Build
+
+```bash
+$ cargo build
+```
+
+Or you can directly execute the binary:
+
+```bash
+$ cargo run
+```
+
+#### WebAssembly
+
+```bash
+$ rustup target add wasm32-wasi
+$ cargo build --target wasm32-wasi
+$ wasmer run target/wasm32-wasi/debug/suggest.wasm encode hello
+```
+
+### Test
+
+This command can also test C API.
+
+```bash
+$ cargo build
+$ cargo test
+```
+
+### Publish
+
+#### [GitHub Releases](https://github.com/ken-matsui/base64-cli/tags)
+
+```bash
+$ git tag v0.1.0
+$ git push origin v0.1.0
+```
+
+#### [crates.io](https://crates.io/)
+
+```bash
+$ cargo publish
+```
+
+#### [wapm.io](https://wapm.io/)
+
+```bash
+$ cargo build --release --target wasm32-wasi
+$ wapm publish
+```
