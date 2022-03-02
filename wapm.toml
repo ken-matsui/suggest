@@ -1,6 +1,6 @@
 [package]
 name = "ken-matsui/suggest"
-version = "0.3.2"
+version = "0.3.3"
 description = "A CLI tool to provide similar name suggestions like \"Did you mean?\""
 license = "MIT"
 readme = "README.md"

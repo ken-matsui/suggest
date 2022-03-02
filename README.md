@@ -1,4 +1,4 @@
-# suggestion [![crates.io version](https://img.shields.io/crates/v/suggestion.svg)](https://crates.io/crates/suggestion) [![crates.io downloads](https://img.shields.io/crates/d/suggestion.svg)](https://crates.io/crates/suggestion)
+# suggest [![crates.io version](https://img.shields.io/crates/v/suggestion.svg)](https://crates.io/crates/suggestion) [![crates.io downloads](https://img.shields.io/crates/d/suggestion.svg)](https://crates.io/crates/suggestion)
 
 A minimal library & CLI tool to provide similar name suggestions like "Did you mean?"
 This library provides suggestion traits for all collection types in the standard library.
