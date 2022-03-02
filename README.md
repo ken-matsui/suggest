@@ -4,7 +4,7 @@ A minimal library & CLI tool to provide similar name suggestions like "Did you m
 This library provides suggestion traits for all collection types in the standard library.
 A WebAssembly package is also supported.
 
-This library is intended to suggest a candidate from a list of unknown suggestions until runtime, in addition to the suggestion mechanism already available in [`clap`](https://github.com/clap-rs/clap).
+This library is intended to suggest a candidate from a list of unknown suggestions until runtime, in addition to the suggestion mechanism already available in [`clap`](https://github.com/clap-rs/clap#default-features).
 
 ## Examples
 
