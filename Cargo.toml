@@ -1,6 +1,6 @@
 [package]
 name = "suggestion"
-version = "0.3.3"
+version = "0.3.4"
 edition = "2021"
 authors = ["Ken Matsui <26405363+ken-matsui@users.noreply.github.com>"]
 description = "A minimal library & CLI tool to provide similar name suggestions like \"Did you mean?\""
