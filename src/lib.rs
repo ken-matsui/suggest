@@ -2,7 +2,7 @@
 //!
 //! # Example
 //! ```
-//! use suggestion::Suggest;
+//! use suggest::Suggest;
 //!
 //! let input = "instakk";
 //!

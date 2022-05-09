@@ -1,4 +1,4 @@
-use suggestion::Suggest;
+use suggest::Suggest;
 
 fn main() {
     let input = "instakk";

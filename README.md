@@ -1,10 +1,12 @@
-# suggest [![crates.io version](https://img.shields.io/crates/v/suggestion.svg)](https://crates.io/crates/suggestion) [![crates.io downloads](https://img.shields.io/crates/d/suggestion.svg)](https://crates.io/crates/suggestion)
+# suggest [![crates.io version](https://img.shields.io/crates/v/suggest.svg)](https://crates.io/crates/suggest) [![crates.io downloads](https://img.shields.io/crates/d/suggest.svg)](https://crates.io/crates/suggest)
 
 A minimal library & CLI tool to provide similar name suggestions like "Did you mean?"
 This library provides suggestion traits for all collection types in the standard library.
 A WebAssembly package is also supported.
 
 This library is intended to suggest a candidate from a list of unknown suggestions until runtime, in addition to the suggestion feature already available in [`clap`](https://github.com/clap-rs/clap#default-features).
+
+> This crate was previously called [`suggestion`](https://crates.io/crates/suggestion) but renamed, and it'll be yanked. 
 
 ## Examples
 
@@ -13,7 +15,7 @@ This library is intended to suggest a candidate from a list of unknown suggestio
 This example can be executed by the `cargo run --example simple` command.
 
 ```rust
-use suggestion::Suggest;
+use suggest::Suggest;
 
 fn main() {
     let input = "instakk";
@@ -39,7 +41,7 @@ Did you mean `install`?
 ### Specifying distance
 
 ```rust
-use suggestion::Suggest;
+use suggest::Suggest;
 
 fn main() {
     let input = "paoc";
@@ -77,7 +79,7 @@ Please let me know if anything is left out through issues or pull requests.
 * `HashMap`
 * `BTreeMap`
 
-To suggest keys, use `suggestion::SuggestKey` trait.
+To suggest keys, use `suggest::SuggestKey` trait.
 
 ### Sets
 
@@ -95,7 +97,7 @@ To suggest keys, use `suggestion::SuggestKey` trait.
 ### Installation
 
 ```bash
-cargo install suggestion
+cargo install suggest
 ```
 
 #### WebAssembly
@@ -111,7 +113,7 @@ $ wapm install ken-matsui/suggest
 
 ```bash
 $ suggest --help
-suggestion 0.3.1
+suggest 0.3.1
 A minimal library & CLI tool to provide similar name suggestions like "Did you mean?"
 
 USAGE:

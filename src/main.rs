@@ -1,5 +1,5 @@
 use clap::Parser;
-use suggestion::Suggest;
+use suggest::Suggest;
 
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]

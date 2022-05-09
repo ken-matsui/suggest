@@ -1,6 +1,6 @@
 [package]
-name = "suggestion"
-version = "0.3.4"
+name = "suggest"
+version = "0.4.0"
 edition = "2021"
 authors = ["Ken Matsui <26405363+ken-matsui@users.noreply.github.com>"]
 description = "A minimal library & CLI tool to provide similar name suggestions like \"Did you mean?\""
@@ -8,12 +8,8 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/ken-matsui/suggest/"
 homepage = "https://github.com/ken-matsui/suggest#readme"
-documentation = "https://docs.rs/suggestion"
+documentation = "https://docs.rs/suggest"
 
 [dependencies]
 clap = { version = "3.1", features = ["derive"] }
 lev_distance = "0.1.1"
-
-[[bin]]
-name = "suggest"
-path = "src/main.rs"
