@@ -8,6 +8,15 @@ This library is intended to suggest a candidate from a list of unknown suggestio
 
 > This crate was previously called [`suggestion`](https://crates.io/crates/suggestion) but renamed, and it'll be yanked. 
 
+## Installation
+
+Add the following to your `Cargo.toml`:
+
+```toml
+[dependencies]
+suggest = "0.4"
+```
+
 ## Examples
 
 ### Simple case
