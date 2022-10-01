@@ -11,5 +11,5 @@ homepage = "https://github.com/ken-matsui/suggest#readme"
 documentation = "https://docs.rs/suggest"
 
 [dependencies]
-clap = { version = "3.2", features = ["derive"] }
+clap = { version = "4.0", features = ["derive"] }
 lev_distance = "0.1.1"
