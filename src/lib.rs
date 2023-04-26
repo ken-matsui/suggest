@@ -46,70 +46,70 @@ pub trait Suggest {
     fn suggest(&self, query: &str) -> Option<String>;
 
     /// Find similar name with dist in values for all collections
-    fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String>;
+    fn suggest_by(&self, query: &str, dist: usize) -> Option<String>;
 }
 pub trait SuggestKey {
     /// Find similar name in keys for Map collections
     fn suggest_key(&self, query: &str) -> Option<String>;
 
     /// Find similar name with dist in keys for Map collections
-    fn suggest_key_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String>;
+    fn suggest_key_by(&self, query: &str, dist: usize) -> Option<String>;
 }
 
 macro_rules! impl_suggest {
     ($t:ident) => {
-        impl<T: std::convert::AsRef<str>> Suggest for $t<T> {
+        impl<T: AsRef<str>> Suggest for $t<T> {
             fn suggest(&self, query: &str) -> Option<String> {
                 find_best_match_for_name(self.iter(), query, None)
             }
-            fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
-                find_best_match_for_name(self.iter(), query, dist)
+            fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
+                find_best_match_for_name(self.iter(), query, Some(dist))
             }
         }
     };
 }
 macro_rules! impl_suggest_key {
     ($t:ident) => {
-        impl<T: std::convert::AsRef<str>, U> SuggestKey for $t<T, U> {
+        impl<T: AsRef<str>, U> SuggestKey for $t<T, U> {
             fn suggest_key(&self, query: &str) -> Option<String> {
                 find_best_match_for_name(self.keys(), query, None)
             }
-            fn suggest_key_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
-                find_best_match_for_name(self.keys(), query, dist)
+            fn suggest_key_by(&self, query: &str, dist: usize) -> Option<String> {
+                find_best_match_for_name(self.keys(), query, Some(dist))
             }
         }
     };
 }
 macro_rules! impl_suggest_value {
     ($t:ident) => {
-        impl<T, U: std::convert::AsRef<str>> Suggest for $t<T, U> {
+        impl<T, U: AsRef<str>> Suggest for $t<T, U> {
             fn suggest(&self, query: &str) -> Option<String> {
                 find_best_match_for_name(self.values(), query, None)
             }
-            fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
-                find_best_match_for_name(self.values(), query, dist)
+            fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
+                find_best_match_for_name(self.values(), query, Some(dist))
             }
         }
     };
 }
 
 // Primitive Array Type
-impl<T: std::convert::AsRef<str>, const N: usize> Suggest for [T; N] {
+impl<T: AsRef<str>, const N: usize> Suggest for [T; N] {
     fn suggest(&self, query: &str) -> Option<String> {
         find_best_match_for_name(self.iter(), query, None)
     }
-    fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
-        find_best_match_for_name(self.iter(), query, dist)
+    fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
+        find_best_match_for_name(self.iter(), query, Some(dist))
     }
 }
 
 // Slices
-impl<T: std::convert::AsRef<str>> Suggest for [T] {
+impl<T: AsRef<str>> Suggest for [T] {
     fn suggest(&self, query: &str) -> Option<String> {
         find_best_match_for_name(self.iter(), query, None)
     }
-    fn suggest_with_dist(&self, query: &str, dist: Option<usize>) -> Option<String> {
-        find_best_match_for_name(self.iter(), query, dist)
+    fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
+        find_best_match_for_name(self.iter(), query, Some(dist))
     }
 }
 
@@ -146,11 +146,8 @@ mod tests {
                 let tmp = ["poac", "poacpp"];
                 let input: $t = &tmp;
                 assert_eq!(input.suggest("paoc"), None);
-                assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
-                assert_eq!(
-                    input.suggest_with_dist("paoc", Some(2)),
-                    Some("poac".to_string())
-                );
+                assert_eq!(input.suggest_by("paoc", 1), None);
+                assert_eq!(input.suggest_by("paoc", 2), Some("poac".to_string()));
             }
         };
     }
@@ -163,11 +160,8 @@ mod tests {
 
                 let input: $t<_> = vec!["poac", "poacpp"].into_iter().collect();
                 assert_eq!(input.suggest("paoc"), None);
-                assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
-                assert_eq!(
-                    input.suggest_with_dist("paoc", Some(2)),
-                    Some("poac".to_string())
-                );
+                assert_eq!(input.suggest_by("paoc", 1), None);
+                assert_eq!(input.suggest_by("paoc", 2), Some("poac".to_string()));
             }
         };
     }
@@ -183,19 +177,13 @@ mod tests {
 
                 let input = $t::<_, _>::from_iter([("poac", 2), ("poacpp", 4)].into_iter());
                 assert_eq!(input.suggest_key("paoc"), None);
-                assert_eq!(input.suggest_key_with_dist("paoc", Some(1)), None);
-                assert_eq!(
-                    input.suggest_key_with_dist("paoc", Some(2)),
-                    Some("poac".to_string())
-                );
+                assert_eq!(input.suggest_key_by("paoc", 1), None);
+                assert_eq!(input.suggest_key_by("paoc", 2), Some("poac".to_string()));
 
                 let input = $t::<_, _>::from_iter([(2, "poac"), (4, "poacpp")].into_iter());
                 assert_eq!(input.suggest("paoc"), None);
-                assert_eq!(input.suggest_with_dist("paoc", Some(1)), None);
-                assert_eq!(
-                    input.suggest_with_dist("paoc", Some(2)),
-                    Some("poac".to_string())
-                );
+                assert_eq!(input.suggest_by("paoc", 1), None);
+                assert_eq!(input.suggest_by("paoc", 2), Some("poac".to_string()));
             }
         };
     }

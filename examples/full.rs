@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use clap::Parser;
 use suggest::Suggest;
 
@@ -19,24 +21,33 @@ struct Args {
     distance: Option<usize>,
 }
 
+const SUCCESS: i32 = 0;
+const FAILURE: i32 = 1;
+
 fn main() {
     let args = Args::parse();
 
-    let exit_code = if args.values.contains(&args.input) {
+    if args.values.contains(&args.input) {
         if !args.quiet {
             eprintln!("The same value with the `{}` input exists.", args.input);
         };
-        1
-    } else if let Some(sugg) = args.values.suggest_with_dist(&args.input, args.distance) {
+        exit(FAILURE);
+    } else if let Some(dist) = args.distance {
+        if let Some(sugg) = args.values.suggest_by(&args.input, dist) {
+            if !args.quiet {
+                println!("The `{}` input is similar to `{}`.", args.input, sugg);
+            };
+            exit(SUCCESS);
+        }
+    } else if let Some(sugg) = args.values.suggest(&args.input) {
         if !args.quiet {
             println!("The `{}` input is similar to `{}`.", args.input, sugg);
         };
-        0
-    } else {
-        if !args.quiet {
-            println!("No similar value for the `{}` input was found.", args.input);
-        };
-        1
+        exit(SUCCESS);
     };
-    std::process::exit(exit_code);
+
+    if !args.quiet {
+        println!("No similar value for the `{}` input was found.", args.input);
+    };
+    exit(FAILURE);
 }
