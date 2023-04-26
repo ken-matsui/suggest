@@ -110,8 +110,6 @@ $ cargo build
 
 ### Test
 
-This command can also test C API.
-
 ```bash
 $ cargo build
 $ cargo test
