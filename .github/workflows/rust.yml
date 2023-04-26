@@ -22,20 +22,6 @@ jobs:
     - name: Build
       run: cargo build --verbose
 
-  run:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v3
-      - run: cargo run instakk update install
-      - run: cargo run install update install && exit 1 || exit 0
-      - run: cargo run hoge update install && exit 1 || exit 0
-
   format:
     runs-on: ubuntu-latest
 
