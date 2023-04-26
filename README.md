@@ -6,8 +6,6 @@ A WebAssembly package is also supported.
 
 This library is intended to suggest a candidate from a list of unknown suggestions until runtime, in addition to the suggestion feature already available in [`clap`](https://github.com/clap-rs/clap#default-features).
 
-> This crate was previously called [`suggestion`](https://crates.io/crates/suggestion) but renamed, and it'll be yanked. 
-
 ## Installation
 
 Add the following to your `Cargo.toml`:
