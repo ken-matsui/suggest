@@ -14,4 +14,4 @@ documentation = "https://docs.rs/suggest"
 lev_distance = "0.1.1"
 
 [dev-dependencies]
-clap = { version = "4.2", features = ["derive"] }
+clap = { version = "4.3", features = ["derive"] }
