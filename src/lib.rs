@@ -56,15 +56,29 @@ pub trait SuggestKey {
     fn suggest_key_by(&self, query: &str, dist: usize) -> Option<String>;
 }
 
+macro_rules! impl_suggest_fns {
+    ($f:ident) => {
+        fn suggest(&self, query: &str) -> Option<String> {
+            find_best_match_for_name(self.$f(), query, None)
+        }
+        fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
+            find_best_match_for_name(self.$f(), query, Some(dist))
+        }
+    };
+}
+
 macro_rules! impl_suggest {
     ($t:ident) => {
         impl<T: AsRef<str>> Suggest for $t<T> {
-            fn suggest(&self, query: &str) -> Option<String> {
-                find_best_match_for_name(self.iter(), query, None)
-            }
-            fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
-                find_best_match_for_name(self.iter(), query, Some(dist))
-            }
+            impl_suggest_fns!(iter);
+        }
+    };
+}
+
+macro_rules! impl_suggest_value {
+    ($t:ident) => {
+        impl<T, U: AsRef<str>> Suggest for $t<T, U> {
+            impl_suggest_fns!(values);
         }
     };
 }
@@ -80,37 +94,21 @@ macro_rules! impl_suggest_key {
         }
     };
 }
-macro_rules! impl_suggest_value {
+macro_rules! impl_suggest_map {
     ($t:ident) => {
-        impl<T, U: AsRef<str>> Suggest for $t<T, U> {
-            fn suggest(&self, query: &str) -> Option<String> {
-                find_best_match_for_name(self.values(), query, None)
-            }
-            fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
-                find_best_match_for_name(self.values(), query, Some(dist))
-            }
-        }
+        impl_suggest_key!($t);
+        impl_suggest_value!($t);
     };
 }
 
 // Primitive Array Type
 impl<T: AsRef<str>, const N: usize> Suggest for [T; N] {
-    fn suggest(&self, query: &str) -> Option<String> {
-        find_best_match_for_name(self.iter(), query, None)
-    }
-    fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
-        find_best_match_for_name(self.iter(), query, Some(dist))
-    }
+    impl_suggest_fns!(iter);
 }
 
 // Slices
 impl<T: AsRef<str>> Suggest for [T] {
-    fn suggest(&self, query: &str) -> Option<String> {
-        find_best_match_for_name(self.iter(), query, None)
-    }
-    fn suggest_by(&self, query: &str, dist: usize) -> Option<String> {
-        find_best_match_for_name(self.iter(), query, Some(dist))
-    }
+    impl_suggest_fns!(iter);
 }
 
 // Sequences
@@ -119,10 +117,8 @@ impl_suggest!(VecDeque);
 impl_suggest!(Vec);
 
 // Maps
-impl_suggest_key!(HashMap);
-impl_suggest_value!(HashMap);
-impl_suggest_key!(BTreeMap);
-impl_suggest_value!(BTreeMap);
+impl_suggest_map!(HashMap);
+impl_suggest_map!(BTreeMap);
 
 // Sets
 impl_suggest!(BTreeSet);
